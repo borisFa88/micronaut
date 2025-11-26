@@ -2,8 +2,6 @@ package com.example.web;
 
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
 
 import java.util.Calendar;
 import java.util.concurrent.*;

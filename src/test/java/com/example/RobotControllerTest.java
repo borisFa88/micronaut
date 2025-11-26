@@ -28,7 +28,7 @@ class RobotControllerTest {
     void runClient(String path) {
         BlockingHttpClient client = httpClient.toBlocking();
         String response = executeRequest(client, path);
-        assertEquals(response, "hi");
+        assertEquals("hi", response);
     }
 
     private String executeRequest(BlockingHttpClient client, String path) {
@@ -40,19 +40,19 @@ class RobotControllerTest {
         long time= System.currentTimeMillis();
         int numberOfThreads =10;
         //CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numberOfThreads);
-        for (int i = 0; i < numberOfThreads; i++) {
-            executor.execute(() -> {
-                runClient("/example/blocking");
-             //   runClient("/example/plain");
-             //   latch.countDown();
-            });
-        }
-        while(executor.getActiveCount()!=0)
-        {
+        try (ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numberOfThreads)) {
+            for (int i = 0; i < numberOfThreads; i++) {
+                executor.execute(() -> {
+                    runClient("/example/blocking");
+                    //   runClient("/example/plain");
+                    //   latch.countDown();
+                });
+            }
+            while (executor.getActiveCount() != 0) {
 
+            }
+            executor.shutdown();
         }
-        executor.shutdown();
         long endTime= System.currentTimeMillis()- time;
         System.out.println( " running time "+endTime/1000);
     }
